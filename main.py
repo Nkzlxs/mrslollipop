@@ -4,12 +4,13 @@ from database_controller import db_controller
 
 class MyClient(discord.Client):
     async def on_ready(self):
+        """ Print to console saying "i am connected" """
         print('Logged on as {0}!'.format(self.user))
 
         """ Get information from web fetcher program"""
         latest_info = Covid19MY.main(self)
 
-        """ Comparing with database """
+        """ Process the fetched infomation with the database """
         a_db = db_controller(
             cured=latest_info['cured'],
             new=latest_info['new'],

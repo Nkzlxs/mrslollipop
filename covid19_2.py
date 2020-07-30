@@ -16,20 +16,19 @@ class Covid19MY():
         """ Find the div with id main-content """
         maincontent_index = res_text.find("<div id=\"main-content\">")
 
-        """ Find the first hyperlink (title) """
+        """ Find the hyperlinks, which are also the first element in each article """
         a_link = res_text.find("<a href=",maincontent_index)
-            
-        """ Find the first and last quote that contains the link 
-        to the latest case """
-        zeroth_link = res_text.find("<a href=",maincontent_index)
+        zeroth_link = res_text.find("<a href=",maincontent_index) # let the program remember the first <a href= position
+
         while True:
+            """ Find the first and last quote that contains the link to the latest case """
             first_quote = res_text.find("\"",a_link)
             end_quote = res_text.find("\"",first_quote+1)
 
             dif = end_quote - first_quote
             # print(f"String length: {dif}")
 
-            """ Verify if it is about the latest information or not """
+            """ Verify if it is about the latest covid19 information or not """
             keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
             verify_word = res_text.find(keywords,first_quote,end_quote)
             if verify_word == -1:
@@ -38,40 +37,39 @@ class Covid19MY():
 
                 """ When the search for "<a href=" returned to the beginning """
                 if a_link == zeroth_link:
-                    exit("No specifed keywords found! Exiting...")
+                    exit("No specifed keywords found! Exiting...") # terminate the program
             else:
                 break
                 pass
                 # print("Keyword found!")
 
-        """ Get the first hyperlink """
+        """ Get the hyperlink encased within the quotes """
         first_hyperlink = res_text[first_quote+1:first_quote+dif]
         # print(first_hyperlink)
 
-        """ Navigate to the first hyperlink """
+        """ Navigate to the fetched hyperlink """
         response = requests.get(url=first_hyperlink)
         res_text = response.text
 
-        """ Find the 2nd image, 1st one currently is it's logo """
+        """ Find the 2nd image, 1st one is currently kpk's logo """
         first_image_index = res_text.find("<img") #logo
         second_image_index = res_text.find("<img",first_image_index+1) #poster
         src_pos = res_text.find("src=",second_image_index)
 
-        """ Find the first and last quote that contains the link 
-        to the latest case infographic """
+        """ Find the first and last quote that contains the link to the latest infographic """
         first_quote = res_text.find("\"",src_pos)
         end_quote = res_text.find("\"",first_quote+1)
 
         dif = end_quote - first_quote
         # print(f"String length: {dif}")
 
-        """ Image source """
+        """ Here is the link to the infographic """
         src_link = res_text[first_quote+1:first_quote+dif]
         # print(src_link)
         answer['image_src'] = src_link
 
 
-        """ Find new cases, death count, cured count, date?"""
+        """ Find new cases, death count, cured count """
         digits = []
         temp = None
         output = ["cured","new","death"]
@@ -103,6 +101,8 @@ class Covid19MY():
             answer[output[n]] = int(a_string)
 
         print(answer)
+
+        """ Return the fetched data and infographic url the the main program """
         return answer
 
 
