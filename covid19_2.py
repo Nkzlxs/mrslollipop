@@ -17,26 +17,32 @@ class Covid19MY():
         maincontent_index = res_text.find("<div id=\"main-content\">")
 
         """ Find the first hyperlink (title) """
-        first_link = res_text.find("<a href=",maincontent_index)
-        # print(first_link)
-
+        a_link = res_text.find("<a href=",maincontent_index)
             
         """ Find the first and last quote that contains the link 
         to the latest case """
-        first_quote = res_text.find("\"",first_link)
-        end_quote = res_text.find("\"",first_quote+1)
+        zeroth_link = res_text.find("<a href=",maincontent_index)
+        while True:
+            first_quote = res_text.find("\"",a_link)
+            end_quote = res_text.find("\"",first_quote+1)
 
-        dif = end_quote - first_quote
-        # print(f"String length: {dif}")
+            dif = end_quote - first_quote
+            # print(f"String length: {dif}")
 
-        """ Verify if it is about the latest information or not """
-        keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
-        verify_word = res_text.find(keywords,first_quote)
-        if verify_word == -1:
-            exit("No specifed keywords found! Exiting...")
-        else:
-            pass
-            # print("Keyword found!")
+            """ Verify if it is about the latest information or not """
+            keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
+            verify_word = res_text.find(keywords,first_quote,end_quote)
+            if verify_word == -1:
+                """ If there's no keywords in the first hyperlink, skip to the next one """
+                a_link = res_text.find("<a href=",a_link+len("<a href="))
+
+                """ When the search for "<a href=" returned to the beginning """
+                if a_link == zeroth_link:
+                    exit("No specifed keywords found! Exiting...")
+            else:
+                break
+                pass
+                # print("Keyword found!")
 
         """ Get the first hyperlink """
         first_hyperlink = res_text[first_quote+1:first_quote+dif]
@@ -96,6 +102,7 @@ class Covid19MY():
             # print(f"{output[n]}: {int(a_string)}")
             answer[output[n]] = int(a_string)
 
+        print(answer)
         return answer
 
 
