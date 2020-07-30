@@ -42,4 +42,4 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run('NzEyNzIyODE1ODU3NTkwMzAz.XsVs2Q.8TA_p0goM-1dFyvaQ_bE4223zss')
+client.run('BOT TOKEN HERE!!')
