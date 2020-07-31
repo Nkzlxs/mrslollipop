@@ -29,9 +29,13 @@ class MyClient(discord.Client):
             title = "COVID-19 Status in\n马来西亚 Malaysia"
             embed_obj= discord.Embed(
                 title=title,
-                description=desc
+                description=desc,
+                url=latest_info['article_src']
             )
             embed_obj.set_image(url=latest_info['image_src'])
+            embed_obj.set_footer(
+                text="From Kpkesihatan"
+            )
             a_channel = client.get_channel(694948853165850674)
             await a_channel.send(
                 content="@everyone Hi",
@@ -43,4 +47,4 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run('Your discord token')
+client.run("Your discord bot token")

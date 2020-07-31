@@ -45,6 +45,7 @@ class Covid19MY():
 
         """ Get the hyperlink encased within the quotes """
         first_hyperlink = res_text[first_quote+1:first_quote+dif]
+        answer['article_src'] = first_hyperlink
         # print(first_hyperlink)
 
         """ Navigate to the fetched hyperlink """
