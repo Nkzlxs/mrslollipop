@@ -24,16 +24,33 @@ class MyClient(discord.Client):
             for x in range(0, len(commands)):
                 target = commands[x]["name"]
                 pos = msg.find(target)
-                if pos == 0 and x == 0:
-                    for argument in commands[x]["arguments"]:
-                        print(argument)
-                        if msg.find(argument, 0+len(target)+1) == 0+len(target)+1:
-                            await self.send_infomation(message)
-                            break
-                        else:
-                            content = msg[len(
-                                target)+1:len(target)+1+len(msg)]
-                            await message.channel.send(content=content)
+                if pos == 0:
+                    if x == 0:
+                        """ Say x reply x and find your status in this server """
+                        print(f"User input: {target}")
+                        for argument in commands[x]["arguments"]:
+                            print(f"User argument: {argument}")
+                            if msg.find(argument, 0+len(target)+1) == 0+len(target)+1:
+                                await self.send_infomation(message)
+                                break
+                            else:
+                                content = msg[len(
+                                    target)+1:len(target)+1+len(msg)]
+                                await message.channel.send(content=content)
+                    elif x == 1:
+                        """ Calculate your days/month/year of neet """
+                        print(f"User input: {target}")
+                        for argument in commands[x]["arguments"]:
+                            print(f"User argument: {argument}")
+                            if msg.find(argument, 0+len(target)+1) == 0+len(target)+1:
+                                rm_len = len(target)+len(argument)+2
+                                input_date = msg[rm_len:rm_len+len(msg)]
+                                if len(input_date) == 8:
+                                    await message.channel.send(content=input_date)
+                                else:
+                                    await message.channel.send(content="Date input error")
+                                break
+
                     break
         print('Message from {0.author}: {0.content}'.format(message))
 
@@ -76,4 +93,5 @@ class MyClient(discord.Client):
 client = MyClient()
 cred_file = open(os.getcwd()+"/credential.json")
 credentials = json.load(cred_file)
+cred_file.close()
 client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
