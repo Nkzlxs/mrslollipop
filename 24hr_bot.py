@@ -30,6 +30,10 @@ class MyClient(discord.Client):
                         if msg.find(argument, 0+len(target)+1) == 0+len(target)+1:
                             await self.send_infomation(message)
                             break
+                        else:
+                            content = msg[len(
+                                target)+1:len(target)+1+len(msg)]
+                            await message.channel.send(content=content)
                     break
         print('Message from {0.author}: {0.content}'.format(message))
 
