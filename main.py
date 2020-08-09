@@ -1,4 +1,6 @@
 import discord
+import json
+import os
 from covid19_2 import Covid19MY
 from database_controller import db_controller
 
@@ -47,4 +49,7 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run("Your discord bot token")
+current_dir = os.getcwd()
+cred_file = open(current_dir+"/credential.json")
+credientials = json.load(cred_file)
+client.run(credientials["DISCORD_BOT_ACCESS_TOKEN"])

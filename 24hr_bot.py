@@ -1,4 +1,5 @@
 import discord
+import os,json
 from datetime import datetime
 
 class MyClient(discord.Client):
@@ -25,6 +26,10 @@ class MyClient(discord.Client):
 
 
     async def on_message(self, message):
+        commmands:{
+            "say":["myinfo"],
+            "add":["neet date"]
+        }
         prefix = ["say","add"]
         commands = ["myinfo"]
         print(message.channel)
@@ -72,4 +77,6 @@ class MyClient(discord.Client):
         print('Message from {0.author}: {0.content}'.format(message))
 
 client = MyClient()
-client.run('DISCORD Bot token')
+cred_file = open(os.getcwd()+"/credential.json")
+credentials = json.load(cred_file)
+client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
