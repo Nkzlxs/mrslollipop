@@ -39,14 +39,13 @@ class MyClient(discord.Client):
                                     target)+1:len(target)+1+len(msg)]
                                 await message.channel.send(content=content)
                     elif x == 1:
-                        """ Calculate your days/month/year of neet """
+                        """ Save your date when started neet """
                         print(f"User input: {target}")
                         for argument in commands[x]["arguments"]:
                             print(f"User argument: {argument}")
                             if msg.find(argument, 0+len(target)+1) == 0+len(target)+1:
                                 rm_len = len(target)+len(argument)+2
                                 input_date = msg[rm_len:rm_len+len(msg)]
-                                # if len(input_date) == 8:
                                 try:
                                     year = int(input_date[0:4])
                                     month = int(input_date[4:6])
@@ -59,65 +58,70 @@ class MyClient(discord.Client):
                                     await message.channel.send(content=f"Data {response['status']}")
                                 except ValueError:
                                     await message.channel.send(content="Date input error")
-                                # else:
-                                #     await message.channel.send(content="Date input error")
                                 break
-
                     break
         print('Message from {0.author}: {0.content}'.format(message))
 
     async def send_infomation(self, message):
-        content = ""
-        author = message.author
-        user_id = author.id
 
-        check_db = db_controller_bot()
-        response = check_db.checkRecordState(userID=user_id)
-        if response['status'] == "got_result":
-            print(response['neet_date'][0])
-            try:
-                neet_date = response["neet_date"][0]
-                current_date = date.today()
+        async with message.channel.typing():
+            content = ""
+            author = message.author
+            user_id = author.id
 
-                if current_date >= neet_date:
-                    time_delta = current_date - neet_date
-                    content += f"\nTime since you neet'd: {time_delta.days} day(s)\n"
-                else:
-                    time_delta = neet_date - current_date
-                    content += f"\nTime till you become neet: {time_delta.days} day(s)\n"
-            except ValueError:
-                await message.channel.send(content="Output error")
+            """ Account age """
+            account_created_unix = (
+                author.id >> 22) + 1420070400000
+            account_created_human = datetime.utcfromtimestamp(
+                account_created_unix/1000).strftime('%Y-%m-%d %H:%M:%S - UTC')
 
-        account_created_unix = (
-            author.id >> 22) + 1420070400000
-        account_created_human = datetime.utcfromtimestamp(
-            account_created_unix/1000).strftime('%Y-%m-%d %H:%M:%S - UTC')
+            header = f"Your account is created on {account_created_human}\n"
 
-        header = f"Your account is created on {account_created_human}\n"
-        header += "Your last message(s):\n"
-        for a_channel in self.get_all_channels():
+            """ Last message history """
+            header += "Your last message(s):\n"
+            for a_channel in self.get_all_channels():
+                if a_channel.type == discord.ChannelType.text and a_channel.category != None:
+                    # print(f"{a_channel.name} < {a_channel.category}")
+                    try:
+                        msg = await a_channel.history(limit=1).flatten()
+                        for msg_obj in msg:
+                            if msg_obj.author == author:
+                                content += a_channel.mention
+                                content += msg_obj.content[0:20]
+                                content += " ..."
+                                content += "\n"
+                    except:
+                        pass
 
-            if a_channel.type == discord.ChannelType.text and a_channel.category != None:
-                # print(f"{a_channel.name} < {a_channel.category}")
+            """ N-E-E-T Content """
+            check_db = db_controller_bot()
+            response = check_db.checkRecordState(userID=user_id)
+            if response['status'] == "got_result":
+                print(response['neet_date'][0])
                 try:
-                    msg = await a_channel.history(limit=1).flatten()
-                    for msg_obj in msg:
-                        if msg_obj.author == author:
-                            content += a_channel.mention
-                            content += msg_obj.content[0:20]
-                            content += " ..."
-                            content += "\n"
-                except:
-                    pass
-        embeds_list = []
-        embeds_list.append(
-            discord.Embed(
-                title="Your Information",
-                colour=0xFFEE11,
-                description=header+content
+                    neet_date = response["neet_date"][0]
+                    current_date = date.today()
+
+                    if current_date >= neet_date:
+                        time_delta = current_date - neet_date
+                        content += f"\nTime since you neet'd: {time_delta.days} day(s)\n"
+                    else:
+                        time_delta = neet_date - current_date
+                        content += f"\nTime till you become neet: {time_delta.days} day(s)\n"
+                except ValueError:
+                    await message.channel.send(content="Output error")
+
+            """ Message making stage """
+            embeds_list = []
+            embeds_list.append(
+                discord.Embed(
+                    title="Your Information",
+                    colour=0xFFEE11,
+                    description=header+content
+                )
             )
-        )
-        await message.channel.send(embed=embeds_list[0])
+
+            await message.channel.send(embed=embeds_list[0])
 
 
 client = MyClient()
