@@ -18,18 +18,8 @@ class db_controller:
         self.cred_file.close()
 
     def fetch_sqldata_n_compare(self):
-        # mydb = mysql.connector.connect(
-        #     host=self.credentials["DATABASES"]["server"]["hostname"],
-        #     user=self.credentials["DATABASES"]["server"]["user"],
-        #     passwd=self.credentials["DATABASES"]["server"]["password"],
-        #     database=self.credentials["DATABASES"]["server"]["database_name"]
-        # )
-        mydb = mysql.connector.connect(
-            host=self.credentials["DATABASES"]["nkzlxs"]["hostname"],
-            user=self.credentials["DATABASES"]["nkzlxs"]["user"],
-            passwd=self.credentials["DATABASES"]["nkzlxs"]["password"],
-            database=self.credentials["DATABASES"]["nkzlxs"]["database_name"]
-        )
+        mydb = self.connectDatabase(connection_type="nkzlxs")
+
         mycursor = mydb.cursor()
 
         mycursor.execute("SELECT * FROM covid19")
@@ -59,18 +49,8 @@ class db_controller:
             }
 
     def insert_to_sql(self):
-        # mydb = mysql.connector.connect(
-        #     host=self.credentials["DATABASES"]["server"]["hostname"],
-        #     user=self.credentials["DATABASES"]["server"]["user"],
-        #     passwd=self.credentials["DATABASES"]["server"]["password"],
-        #     database=self.credentials["DATABASES"]["server"]["database_name"]
-        # )
-        mydb = mysql.connector.connect(
-            host=self.credentials["DATABASES"]["nkzlxs"]["hostname"],
-            user=self.credentials["DATABASES"]["nkzlxs"]["user"],
-            passwd=self.credentials["DATABASES"]["nkzlxs"]["password"],
-            database=self.credentials["DATABASES"]["nkzlxs"]["database_name"]
-        )
+        mydb = self.connectDatabase(connection_type="nkzlxs")
+
         mycursor = mydb.cursor()
         sql = "INSERT INTO covid19 (countryID, confirmedCount, curedCount, deadCount, timeRecorded) VALUES (%s,%s,%s,%s,%s)"
         value = (self.latest_countryID, self.latest_confirmedCount,
@@ -83,3 +63,21 @@ class db_controller:
         self.difinConfirmed = self.latest_confirmedCount - self.last_confirmedCount
         self.difinCured = self.latest_curedCount - self.last_curedCount
         self.difinDead = self.latest_deadCount - self.last_deadCount
+
+    def connectDatabase(self, connection_type=None):
+        mydb = None
+        if connection_type == "server":
+            mydb = mysql.connector.connect(
+                host=self.credentials["DATABASES"]["server"]["hostname"],
+                user=self.credentials["DATABASES"]["server"]["user"],
+                passwd=self.credentials["DATABASES"]["server"]["password"],
+                database=self.credentials["DATABASES"]["server"]["database_name"]
+            )
+        elif connection_type == "nkzlxs":
+            mydb = mysql.connector.connect(
+                host=self.credentials["DATABASES"]["nkzlxs"]["hostname"],
+                user=self.credentials["DATABASES"]["nkzlxs"]["user"],
+                passwd=self.credentials["DATABASES"]["nkzlxs"]["password"],
+                database=self.credentials["DATABASES"]["nkzlxs"]["database_name"]
+            )
+        return mydb

@@ -1,7 +1,7 @@
 import discord
 import os
 import json
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 commands = [
     {"name": "say", "arguments": ["myinfo"]},
@@ -46,7 +46,22 @@ class MyClient(discord.Client):
                                 rm_len = len(target)+len(argument)+2
                                 input_date = msg[rm_len:rm_len+len(msg)]
                                 if len(input_date) == 8:
-                                    await message.channel.send(content=input_date)
+                                    year = int(input_date[0:4])
+                                    month = int(input_date[4:6])
+                                    day = int(input_date[6:8])
+                                    try:
+                                        neet_date = date(
+                                            year=year, month=month, day=day)
+                                        current_date = date.today()
+
+                                        if current_date >= neet_date:
+                                            time_delta = current_date - neet_date
+                                            await message.channel.send(content=f"\nTime since you neet'd: {time_delta.days} day(s)")
+                                        else:
+                                            time_delta = neet_date - current_date
+                                            await message.channel.send(content=f"\nTime till you become neet: {time_delta.days} day(s)")
+                                    except ValueError:
+                                        await message.channel.send(content="Date input error")
                                 else:
                                     await message.channel.send(content="Date input error")
                                 break
