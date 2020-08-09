@@ -14,17 +14,13 @@
 
 ### Current available commands
 
-`say {text} - return any value in {text}`
+    say {text} - return any value in {text}
+    say myinfo
+        return your last message in all the channels in the server,
+               the date of your account creation,
+               the day(s) since you become a NEET.
 
-`say myinfo`
-
-`return your last message in all the channels in the server`
-
-`return the date of your account creation`
-
-`return the day(s) since you become a NEET.`
-
-`add neet date {YYYYMMDD}- record your date of becoming a NEET`
+    add neet date {YYYYMMDD}- record your date of becoming a NEET`
 
 ## Misc.
 
