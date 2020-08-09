@@ -30,11 +30,11 @@ class MyClient(discord.Client):
             "say":["myinfo"],
             "add":["neet date"]
         }
-        prefix = ["say","add"]
-        commands = ["myinfo"]
         print(message.channel)
         if(message.author != self.user):
             msg = message.content
+            for command in commmands.keys():
+                print(command)
             pos = msg.find(prefix)
             content = None
             if pos == 0:
