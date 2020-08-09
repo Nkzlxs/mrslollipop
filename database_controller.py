@@ -13,6 +13,8 @@ class db_controller:
         self.latest_timestamp = int(time.time() * 1000)
         # hardcoded because Nkzlxs dont want to update database
         self.latest_countryID = 952007
+
+        """ Get credentials """
         self.cred_file = open(os.getcwd()+"/credential.json")
         self.credentials = json.load(self.cred_file)
         self.cred_file.close()
@@ -81,3 +83,72 @@ class db_controller:
                 database=self.credentials["DATABASES"]["nkzlxs"]["database_name"]
             )
         return mydb
+
+
+class db_controller_bot:
+    def __init__(self):
+        """ Get credentials """
+        self.cred_file = open(os.getcwd()+"/credential.json")
+        self.credentials = json.load(self.cred_file)
+        self.cred_file.close()
+        pass
+
+    def connectDatabase(self, connection_type=None):
+        mydb = None
+        if connection_type == "server":
+            mydb = mysql.connector.connect(
+                host=self.credentials["DATABASES"]["server"]["hostname"],
+                user=self.credentials["DATABASES"]["server"]["user"],
+                passwd=self.credentials["DATABASES"]["server"]["password"],
+                database=self.credentials["DATABASES"]["server"]["database_name"]
+            )
+        elif connection_type == "nkzlxs":
+            mydb = mysql.connector.connect(
+                host=self.credentials["DATABASES"]["nkzlxs"]["hostname"],
+                user=self.credentials["DATABASES"]["nkzlxs"]["user"],
+                passwd=self.credentials["DATABASES"]["nkzlxs"]["password"],
+                database=self.credentials["DATABASES"]["nkzlxs"]["database_name"]
+            )
+        return mydb
+
+    def checkRecordState(self, userID=None):
+        mydb = self.connectDatabase(connection_type="nkzlxs")
+        db_cursor = mydb.cursor()
+        query = (
+            f"SELECT neet_date FROM user_info WHERE user_id = {userID}"
+        )
+        db_cursor.execute(query)
+        result = db_cursor.fetchall()
+        mydb.close()
+        if len(result) == 0:
+            return {"status": "no_result"}
+        else:
+            return {
+                "status": "got_result",
+                "neet_date": result[0]
+            }
+
+    def updateDatabase(self, userID, neetDate):
+        response = self.checkRecordState(userID=userID)
+        if response["status"] == "no_result":
+            """ Insert new data into database """
+            mydb = self.connectDatabase(connection_type="nkzlxs")
+            db_cursor = mydb.cursor()
+            query = (
+                f"INSERT INTO user_info (user_id,neet_date) VALUE ({userID},'{neetDate}')"
+            )
+            db_cursor.execute(query)
+            mydb.commit()
+            mydb.close()
+            return {"status": "creation done"}
+        elif response["status"] == "got_result":
+            """ Update the existing database """
+            mydb = self.connectDatabase(connection_type="nkzlxs")
+            db_cursor = mydb.cursor()
+            query = (
+                f"UPDATE user_info SET neet_date = ('{neetDate}') WHERE user_id = ({userID})"
+            )
+            db_cursor.execute(query)
+            mydb.commit()
+            mydb.close()
+            return {"status": "update done"}
