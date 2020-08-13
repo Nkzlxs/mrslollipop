@@ -49,7 +49,7 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-current_dir = os.getcwd()
+current_dir = os.path.dirname(os.path.realpath(__file__))
 cred_file = open(current_dir+"/credential.json")
 credientials = json.load(cred_file)
 cred_file.close()

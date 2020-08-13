@@ -125,7 +125,7 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-cred_file = open(os.getcwd()+"/credential.json")
+cred_file = open(os.path.dirname(os.path.realpath(__file__))+"/credential.json")
 credentials = json.load(cred_file)
 cred_file.close()
 client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])

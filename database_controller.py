@@ -15,7 +15,7 @@ class db_controller:
         self.latest_countryID = 952007
 
         """ Get credentials """
-        self.cred_file = open(os.getcwd()+"/credential.json")
+        self.cred_file = open(os.path.dirname(os.path.realpath(__file__))+"/credential.json")
         self.credentials = json.load(self.cred_file)
         self.cred_file.close()
 
@@ -88,7 +88,7 @@ class db_controller:
 class db_controller_bot:
     def __init__(self):
         """ Get credentials """
-        self.cred_file = open(os.getcwd()+"/credential.json")
+        self.cred_file = open(os.path.dirname(os.path.realpath(__file__))+"/credential.json")
         self.credentials = json.load(self.cred_file)
         self.cred_file.close()
         pass
