@@ -182,7 +182,6 @@ def main():
         os.path.realpath(__file__))+"/credential.json")
     credentials = json.load(cred_file)
     cred_file.close()
-    # await client.start(credentials["DISCORD_BOT_ACCESS_TOKEN"])
     client = MyClient()
 
     async def test():
