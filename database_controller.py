@@ -20,7 +20,7 @@ class db_controller:
         self.cred_file.close()
 
     def fetch_sqldata_n_compare(self):
-        mydb = self.connectDatabase(connection_type="nkzlxs")
+        mydb = self.connectDatabase(connection_type=self.credentials['CURRENT_EXECUTIONER'])
 
         mycursor = mydb.cursor()
 
@@ -51,7 +51,7 @@ class db_controller:
             }
 
     def insert_to_sql(self):
-        mydb = self.connectDatabase(connection_type="nkzlxs")
+        mydb = self.connectDatabase(connection_type=self.credentials['CURRENT_EXECUTIONER'])
 
         mycursor = mydb.cursor()
         sql = "INSERT INTO covid19 (countryID, confirmedCount, curedCount, deadCount, timeRecorded) VALUES (%s,%s,%s,%s,%s)"
@@ -112,7 +112,7 @@ class db_controller_bot:
         return mydb
 
     def checkRecordState(self, userID=None):
-        mydb = self.connectDatabase(connection_type="nkzlxs")
+        mydb = self.connectDatabase(connection_type=self.credentials['CURRENT_EXECUTIONER'])
         db_cursor = mydb.cursor()
         query = (
             f"SELECT neet_date FROM user_info WHERE user_id = {userID}"
@@ -132,7 +132,7 @@ class db_controller_bot:
         response = self.checkRecordState(userID=userID)
         if response["status"] == "no_result":
             """ Insert new data into database """
-            mydb = self.connectDatabase(connection_type="nkzlxs")
+            mydb = self.connectDatabase(connection_type=self.credentials['CURRENT_EXECUTIONER'])
             db_cursor = mydb.cursor()
             query = (
                 f"INSERT INTO user_info (user_id,neet_date) VALUE ({userID},'{neetDate}')"
@@ -143,7 +143,7 @@ class db_controller_bot:
             return {"status": "creation done"}
         elif response["status"] == "got_result":
             """ Update the existing database """
-            mydb = self.connectDatabase(connection_type="nkzlxs")
+            mydb = self.connectDatabase(connection_type=self.credentials['CURRENT_EXECUTIONER'])
             db_cursor = mydb.cursor()
             query = (
                 f"UPDATE user_info SET neet_date = ('{neetDate}') WHERE user_id = ({userID})"

@@ -1,6 +1,8 @@
 import discord
 import os
 import json
+import asyncio
+
 from datetime import datetime, date, timedelta
 from database_controller import db_controller_bot
 
@@ -38,6 +40,7 @@ class MyClient(discord.Client):
                                 content = msg[len(
                                     target)+1:len(target)+1+len(msg)]
                                 await message.channel.send(content=content)
+                                break
                     elif x == 1:
                         """ Save your date when started neet """
                         print(f"User input: {target}")
@@ -123,9 +126,27 @@ class MyClient(discord.Client):
 
             await message.channel.send(embed=embeds_list[0])
 
+    async def send_null(self, currentTime=None):
+        channel_id = 723550495662145567
+        target = self.get_channel(channel_id)
+        await target.send(content=f"Current time: {currentTime}")
 
-client = MyClient()
-cred_file = open(os.path.dirname(os.path.realpath(__file__))+"/credential.json")
-credentials = json.load(cred_file)
-cred_file.close()
-client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
+
+def main():
+    cred_file = open(os.path.dirname(
+        os.path.realpath(__file__))+"/credential.json")
+    credentials = json.load(cred_file)
+    cred_file.close()
+    # await client.start(credentials["DISCORD_BOT_ACCESS_TOKEN"])
+    client = MyClient()
+
+    async def test():
+        while True:
+            await asyncio.sleep(60)
+            await client.send_null(client.loop.time())
+    client.loop.create_task(test())
+    client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
+
+
+if __name__ == "__main__":
+    main()
