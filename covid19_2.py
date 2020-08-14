@@ -3,7 +3,7 @@ import requests
 class Covid19MY():
 
     def __init__(self):
-        self.main()
+        pass
 
     def main(self):
         answer = {}

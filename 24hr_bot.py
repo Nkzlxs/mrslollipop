@@ -2,9 +2,12 @@ import discord
 import os
 import json
 import asyncio
-
 from datetime import datetime, date, timedelta
+import time
+
+from covid19_2 import Covid19MY
 from database_controller import db_controller_bot
+from database_controller import db_controller
 
 commands = [
     {"name": "say", "arguments": ["myinfo"]},
@@ -127,9 +130,51 @@ class MyClient(discord.Client):
             await message.channel.send(embed=embeds_list[0])
 
     async def send_null(self, currentTime=None):
-        channel_id = 723550495662145567
+        # channel_id = 723550495662145567
+        channel_id = 739949693982998568
         target = self.get_channel(channel_id)
-        await target.send(content=f"Current time: {currentTime}")
+        await target.send(content=currentTime)
+
+    async def update_covid19(self):
+        """ Get information from web fetcher program"""
+        latest_info = Covid19MY.main(self)
+
+        """ Process the fetched infomation with the database """
+        a_db = db_controller(
+            cured=latest_info['cured'],
+            new=latest_info['new'],
+            death=latest_info['death']
+        )
+        response = a_db.fetch_sqldata_n_compare()
+
+        """ Decide to post or not """
+        if response['status'] is True:
+            """ Modify the description """
+            desc = ""
+            desc += ":chart_with_upwards_trend:Confirmed Count: %d (+%d)\n" % (
+                latest_info['new'], response['d_new'])
+            desc += ":sparkling_heart:Cured Count: %d (+%d)\n" % (
+                latest_info['cured'], response['d_cured'])
+            desc += ":skull:Death Count: %d (+%d)\n" % (
+                latest_info['death'], response['d_death'])
+
+            title = "COVID-19 Status in\n马来西亚 Malaysia"
+            embed_obj = discord.Embed(
+                title=title,
+                description=desc,
+                url=latest_info['article_src']
+            )
+            embed_obj.set_image(url=latest_info['image_src'])
+            embed_obj.set_footer(
+                text="From Kpkesihatan"
+            )
+            a_channel = self.get_channel(694948853165850674)
+            await a_channel.send(
+                content="@everyone Hi",
+                embed=embed_obj
+            )
+        else:
+            print(f"There's no update! {response['status']}")
 
 
 def main():
@@ -141,9 +186,20 @@ def main():
     client = MyClient()
 
     async def test():
+        oneway = True
+        covid_minute = [0, 30]
+
         while True:
-            await asyncio.sleep(60)
-            await client.send_null(client.loop.time())
+            await asyncio.sleep(1)
+            gmttime = time.gmtime(time.time())
+            if (gmttime.tm_min == covid_minute[0] or gmttime.tm_min == covid_minute[1]) and oneway == True:
+                await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
+                await client.update_covid19()
+                oneway = False
+            elif (gmttime.tm_min != covid_minute[0] and gmttime.tm_min != covid_minute[1]):
+                oneway = True
+            # else:
+            #     await client.send_null(f"{gmttime.tm_year}年{gmttime.tm_mon}月{gmttime.tm_mday}日{gmttime.tm_hour}时{gmttime.tm_min}分{gmttime.tm_sec}秒")
     client.loop.create_task(test())
     client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
 
