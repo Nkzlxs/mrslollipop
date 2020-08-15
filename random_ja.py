@@ -3,7 +3,8 @@
 
 import imaplib
 import base64
-import oauth2
+# import oauth2
+import oauth2_simplified
 
 import time
 import requests
@@ -22,13 +23,13 @@ class randomGifJA:
         cred_file.close()
 
         """First, get a new token"""
-        refreshToken = oauth2.RefreshToken(
+        refreshToken = oauth2_simplified.RefreshToken(
             client_id=self.credentials["GOOGLE_CREDENTIAL"]["installed"]["client_id"],
             client_secret=self.credentials["GOOGLE_CREDENTIAL"]["installed"]["client_secret"],
             refresh_token=self.credentials["GOOGLE_CREDENTIAL"]["installed"]["refresh_token"])
 
         """Then, based on that token, generate a new auth string"""
-        someString = oauth2.GenerateOAuth2String(
+        someString = oauth2_simplified.GenerateOAuth2String(
             username=self.credentials["GOOGLE_CREDENTIAL"]["EMAIL_USERNAME"], access_token=refreshToken['access_token'], base64_encode=False)
 
         """
@@ -57,7 +58,7 @@ class randomGifJA:
         imap_connection.select("TestFromIMAP")
         search_result = imap_connection.search(None, 'ALL')
         print(search_result)
-        mail_list_number = search_result[1][0].split(' ')
+        mail_list_number = search_result[1][0].decode("utf-8") .split(' ')
         print(mail_list_number)
 
         """Write down the latest mail number"""
@@ -74,23 +75,17 @@ class randomGifJA:
         else:
             print("There's update")
             # There's update on mail
-
-            # Update the latest recording
-            modify_record_file = open(fileLocation, "w")
-            modify_record_file.write(
-                "%s" % mail_list_number[len(mail_list_number)-1])
-            modify_record_file.close()
-
             """Fetch body messages here!!"""
             # Fetch the latest mail BODY[1] PS: idk why fetching body[1] works
             typ, fetch_data = imap_connection.fetch(
                 mail_list_number[len(mail_list_number)-1], "(BODY[1])")
-            # print(fetch_data[0][1])
+            # print(type(fetch_data[0][1]))
 
             # decode the fetched base64 encoding
+            # decoded_string = base64.decodestring(fetch_data[0][1])
             decoded_string = base64.decodestring(fetch_data[0][1])
-            # print(decoded_string)
-
+            print(decoded_string)
+            exit()
             # List of field i wanted to select
             selected_words = [
                 "Japanese Word of the Day",
@@ -155,6 +150,13 @@ class randomGifJA:
                     '\r\n', " ").replace('\t', "")
                 pointer += 1
             # print(self.word_array)
+            
+            # Update the latest recording
+            modify_record_file = open(fileLocation, "w")
+            modify_record_file.write(
+                "%s" % mail_list_number[len(mail_list_number)-1])
+            modify_record_file.close()
+            
             return True
 
     def searchInTenor(self):

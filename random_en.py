@@ -6,6 +6,13 @@ import os
 
 class tenorGif_en:
     def __init__(self):
+        """ Zeroth, Get credentials """
+        cred_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "credential.json")
+        cred_file = open(cred_path)
+        self.credentials = json.load(cred_file)
+        cred_file.close()
+
         """Get qualified random word"""
         self.targetWord = self.getRandomWord()
         fileLocation = os.path.join(os.path.dirname(
@@ -31,8 +38,8 @@ class tenorGif_en:
     def getRandomWord(self):
         self.ROOT_WORDAPI_URL = "https://wordsapiv1.p.rapidapi.com/words/"
         self.myHeader = {
-            "X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com",
-            "X-RapidAPI-Key": "cb3c86c0c8msh7ac774ab59d2d8fp177e87jsnefc2884e3964"
+            "X-RapidAPI-Host": self.credentials["RAPID_API"]["X-RapidAPI-Host"],
+            "X-RapidAPI-Key": self.credentials["RAPID_API"]["X-RapidAPI-Key"]
         }
 
         """
