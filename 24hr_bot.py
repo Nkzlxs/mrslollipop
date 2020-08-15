@@ -176,10 +176,14 @@ class MyClient(discord.Client):
         else:
             print(f"There's no update! {response['status']}")
 
+    async def update_randomgif_en(self):
+        pass
+
 
 def main():
-    cred_file = open(os.path.dirname(
-        os.path.realpath(__file__))+"/credential.json")
+    cred_path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), "credential.json")
+    cred_file = open(cred_path)
     credentials = json.load(cred_file)
     cred_file.close()
     client = MyClient()
@@ -187,14 +191,18 @@ def main():
     async def test():
         oneway = True
         covid_minute = [0, 30]
+        gif_hr = [12]
 
         while True:
             await asyncio.sleep(1)
             gmttime = time.gmtime(time.time())
-            if (gmttime.tm_min == covid_minute[0] or gmttime.tm_min == covid_minute[1]) and oneway == True:
-                await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
-                await client.update_covid19()
-                oneway = False
+            if oneway == True:
+                if (gmttime.tm_min == covid_minute[0] or gmttime.tm_min == covid_minute[1]):
+                    await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
+                    await client.update_covid19()
+                    oneway = False
+                elif gmttime.tm_hour == gif_hr[0]:
+                    oneway = False
             elif (gmttime.tm_min != covid_minute[0] and gmttime.tm_min != covid_minute[1]):
                 oneway = True
             # else:

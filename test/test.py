@@ -1,10 +1,13 @@
 import time
-
+import os
 
 def main():
     pro = int(time.time() * 1000)  # convert to milliseconds and Integer
     gmttime = time.gmtime(time.time())
     print(f"{gmttime.tm_year}年{gmttime.tm_mon}月{gmttime.tm_mday}日{gmttime.tm_hour}时{gmttime.tm_min}分{gmttime.tm_sec}秒")
+    fileLocation = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), "log.txt")
+    print(fileLocation)
 
 
 if __name__ == "__main__":
