@@ -203,7 +203,7 @@ def main():
             gmttime = time.gmtime(time.time())
             if oneway == True:
                 if (gmttime.tm_min == covid_minute[0] or gmttime.tm_min == covid_minute[1]):
-                    await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
+                    # await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
                     await client.update_covid19()
                     oneway = False
                 elif gmttime.tm_hour == gif_hr[0]:
