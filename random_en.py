@@ -1,10 +1,11 @@
 import requests
 import time
+import json
 
 import os
 
 
-class tenorGif_en:
+class randomGifEN:
     def __init__(self):
         """ Zeroth, Get credentials """
         cred_path = os.path.join(os.path.dirname(
@@ -12,6 +13,9 @@ class tenorGif_en:
         cred_file = open(cred_path)
         self.credentials = json.load(cred_file)
         cred_file.close()
+
+        """ Set url variable """
+        self.DISCORD_URL = self.credentials["DISCORD_WEBHOOK"]["RANDOMGIF_EN"]
 
         """Get qualified random word"""
         self.targetWord = self.getRandomWord()
@@ -138,7 +142,6 @@ class tenorGif_en:
             return True
 
     def postToDiscord(self):
-        self.DISCORD_URL = "https://discord.com/api/webhooks/713288509359783937/ueCON8bjIkuLSpJJ36PtxS2nKkgK58Nakz7MOSEAE5fJJZrhygenYRO1_B1z5D8Mq11S"
         myHeader = {
             "Content-Type": "application/json"
         }
@@ -196,7 +199,6 @@ class tenorGif_en:
         pass
 
     def postToDiscord_empty(self):
-        self.DISCORD_URL = "https://discord.com/api/webhooks/713288509359783937/ueCON8bjIkuLSpJJ36PtxS2nKkgK58Nakz7MOSEAE5fJJZrhygenYRO1_B1z5D8Mq11S"
         myHeader = {
             "Content-Type": "application/json"
         }
@@ -237,4 +239,4 @@ class tenorGif_en:
 
 
 if __name__ == "__main__":
-    testThing = tenorGif_en()
+    testThing = randomGifEN()

@@ -8,6 +8,8 @@ import time
 from covid19_2 import Covid19MY
 from database_controller import db_controller_bot
 from database_controller import db_controller
+import random_ja
+import random_en
 
 commands = [
     {"name": "say", "arguments": ["myinfo"]},
@@ -177,7 +179,10 @@ class MyClient(discord.Client):
             print(f"There's no update! {response['status']}")
 
     async def update_randomgif_en(self):
-        pass
+        gif_en = random_en.randomGifEN()
+
+    async def update_randomgif_ja(self):
+        gif_ja = random_ja.randomGifJA()
 
 
 def main():
@@ -202,6 +207,8 @@ def main():
                     await client.update_covid19()
                     oneway = False
                 elif gmttime.tm_hour == gif_hr[0]:
+                    await client.update_randomgif_en()
+                    await client.update_randomgif_ja()
                     oneway = False
             elif (gmttime.tm_min != covid_minute[0] and gmttime.tm_min != covid_minute[1]):
                 oneway = True

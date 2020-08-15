@@ -22,6 +22,9 @@ class randomGifJA:
         self.credentials = json.load(cred_file)
         cred_file.close()
 
+        """ Set url variable """
+        self.DISCORD_URL = self.credentials["DISCORD_WEBHOOK"]["RANDOMGIF_JA"]
+
         """First, get a new token"""
         refreshToken = oauth2_simplified.RefreshToken(
             client_id=self.credentials["GOOGLE_CREDENTIAL"]["installed"]["client_id"],
@@ -83,9 +86,8 @@ class randomGifJA:
 
             # decode the fetched base64 encoding
             # decoded_string = base64.decodestring(fetch_data[0][1])
-            decoded_string = base64.decodestring(fetch_data[0][1])
+            decoded_string = base64.decodebytes(fetch_data[0][1]).decode('utf-8',"ignore")
             print(decoded_string)
-            exit()
             # List of field i wanted to select
             selected_words = [
                 "Japanese Word of the Day",
@@ -191,7 +193,6 @@ class randomGifJA:
         """Post to discord stating we found gif"""
         print("Gif found")
 
-        self.DISCORD_URL = "https://discord.com/api/webhooks/715951509438857246/KoBCJhnC3hb1-TFSQh-uYM3YM7Eet3JKFvxEJ2UH6gG90ULIy8AhdtbakK0IEwhqpLhV"
         my_header = {"Content-Type": "application/json"}
         myEmbeds = []
 
@@ -262,7 +263,6 @@ class randomGifJA:
         """Post to discord stating we can't find any gif"""
         print("empty")
 
-        self.DISCORD_URL = "https://discord.com/api/webhooks/715951509438857246/KoBCJhnC3hb1-TFSQh-uYM3YM7Eet3JKFvxEJ2UH6gG90ULIy8AhdtbakK0IEwhqpLhV"
         my_header = {"Content-Type": "application/json"}
         myEmbeds = []
 
@@ -312,7 +312,6 @@ class randomGifJA:
         """Post to discord stating we can't find any gif"""
         print("test to discord")
 
-        self.DISCORD_URL = "https://discord.com/api/webhooks/715951509438857246/KoBCJhnC3hb1-TFSQh-uYM3YM7Eet3JKFvxEJ2UH6gG90ULIy8AhdtbakK0IEwhqpLhV"
         my_header = {"Content-Type": "application/json"}
         myEmbeds = []
 

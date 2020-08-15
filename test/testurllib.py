@@ -24,3 +24,7 @@ def GenerateOAuth2String(username, access_token, base64_encode=True):
         auth_string = base64.b64encode(auth_string)
     # return auth_string
     print(auth_string)
+
+from urllib.parse import unquote
+s = b'\xe9\xac\xb1\xe9\x99\xb6\xe3\x81\x97\xe3\x81\x84\xe4\xba\xba\xe3\x81\xa0\xe3\x81\xad\xe3\x80\x82'.decode("utf-8", "ignore")
+print(s)
