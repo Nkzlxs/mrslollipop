@@ -20,7 +20,7 @@ class randomGifEN:
         """Get qualified random word"""
         self.targetWord = self.getRandomWord()
         fileLocation = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "log_en.txt")
+            os.path.realpath(__file__)), "log", "log_en.txt")
         fileLog = open(fileLocation, 'a')
         currentTime = time.strftime("%c %H:%M:%S %Z")
         fileLog.write("%s\n%s\n" % (currentTime, self.targetWord['word']))

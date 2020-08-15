@@ -66,7 +66,7 @@ class randomGifJA:
 
         """Write down the latest mail number"""
         fileLocation = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "recentMail.txt")
+            os.path.realpath(__file__)), "log", "recentMail.txt")
         record_file = open(fileLocation, "r")
         latest_recorded_no = record_file.read()
         record_file.close()
@@ -86,7 +86,8 @@ class randomGifJA:
 
             # decode the fetched base64 encoding
             # decoded_string = base64.decodestring(fetch_data[0][1])
-            decoded_string = base64.decodebytes(fetch_data[0][1]).decode('utf-8',"ignore")
+            decoded_string = base64.decodebytes(
+                fetch_data[0][1]).decode('utf-8', "ignore")
             print(decoded_string)
             # List of field i wanted to select
             selected_words = [
@@ -152,13 +153,13 @@ class randomGifJA:
                     '\r\n', " ").replace('\t', "")
                 pointer += 1
             # print(self.word_array)
-            
+
             # Update the latest recording
             modify_record_file = open(fileLocation, "w")
             modify_record_file.write(
                 "%s" % mail_list_number[len(mail_list_number)-1])
             modify_record_file.close()
-            
+
             return True
 
     def searchInTenor(self):
@@ -336,7 +337,7 @@ class randomGifJA:
 
     def updateLog(self, flag):
         fileLocation = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "log_ja.txt")
+            os.path.realpath(__file__)), "log", "log_ja.txt")
         log_file = open(fileLocation, "a")
         if flag is True:
             currentTime = time.strftime("%c %H:%M:%S %Z")
@@ -351,28 +352,5 @@ class randomGifJA:
         log_file.close()
 
 
-def testing():
-    """ Zeroth, read the newest Credential json file """
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    jsonfile_path = dir_path + "/newestCredential.json"
-    json_read = open(jsonfile_path)
-    json_string = json_read.read()
-    json_object = json.loads(json_string)
-    json_read.close()
-
-    """First, get a new token"""
-    refreshToken = oauth2.RefreshToken(
-        client_id=json_object['client_id'],
-        client_secret=json_object['client_secret'],
-        refresh_token=json_object['refresh_token'])
-    print(refreshToken)
-    """Then, based on that token, generate a new auth string"""
-    someString = oauth2.GenerateOAuth2String(
-        username="nkzlxs@gmail.com", access_token=refreshToken['access_token'], base64_encode=False)
-
-    print(someString)
-
-
 if __name__ == "__main__":
     a_jagif = randomGifJA()
-    # testing()
