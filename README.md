@@ -1,5 +1,11 @@
 # Discord bot for Nkzlxs's Discord Server
 
+## Python Modules Requirements
+[requirements.txt](https://github.com/Nkzlxs/mrslollipop/blob/master/requirements.txt)
+1. requests==2.23.0
+2. discord.py==1.3.4
+3. mysql-connector-python==8.0.19
+
 ## Features
 1. Auto-updating information on COVID-19 Malaysia
 2. Bot commands
