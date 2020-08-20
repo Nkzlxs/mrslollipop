@@ -24,20 +24,3 @@ def GenerateOAuth2String(username, access_token, base64_encode=True):
     if base64_encode:
         auth_string = base64.b64encode(auth_string)
     return auth_string
-    # print(auth_string)
-
-
-# cred_path = os.path.join(os.path.dirname(
-#     os.path.realpath(__file__)), "credential.json")
-# cred_file = open(cred_path)
-# credentials = json.load(cred_file)
-# cred_file.close()
-
-# """First, get a new token"""
-# refreshToken = RefreshToken(
-#     client_id=credentials["GOOGLE_CREDENTIAL"]["installed"]["client_id"],
-#     client_secret=credentials["GOOGLE_CREDENTIAL"]["installed"]["client_secret"],
-#     refresh_token=credentials["GOOGLE_CREDENTIAL"]["installed"]["refresh_token"])
-
-# someString = GenerateOAuth2String(
-#     username=credentials["GOOGLE_CREDENTIAL"]["EMAIL_USERNAME"], access_token=refreshToken['access_token'], base64_encode=False)

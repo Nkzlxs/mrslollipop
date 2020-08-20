@@ -193,7 +193,7 @@ def main():
     cred_file.close()
     client = MyClient()
 
-    async def test():
+    async def clock():
         oneway = True
         covid_minute = [0, 30]
         gif_hr = [12]
@@ -206,15 +206,13 @@ def main():
                     # await client.send_null(f"It's {gmttime.tm_min}m, i will only say this once!\n Now updating covid19")
                     await client.update_covid19()
                     oneway = False
-                elif gmttime.tm_hour == gif_hr[0]:
+                if gmttime.tm_hour == gif_hr[0]:
                     await client.update_randomgif_en()
                     await client.update_randomgif_ja()
                     oneway = False
             elif (gmttime.tm_min != covid_minute[0] and gmttime.tm_min != covid_minute[1]) and (gmttime.tm_hour != gif_hr[0]):
                 oneway = True
-            # else:
-            #     await client.send_null(f"{gmttime.tm_year}年{gmttime.tm_mon}月{gmttime.tm_mday}日{gmttime.tm_hour}时{gmttime.tm_min}分{gmttime.tm_sec}秒")
-    client.loop.create_task(test())
+    client.loop.create_task(clock())
     client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
 
 
