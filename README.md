@@ -1,4 +1,4 @@
-# Discord bot for Nkzlxs's Discord Server Development Branch
+# Discord bot for Nkzlxs's Discord Server
 
 ## Python Modules Requirements
 [requirements.txt](https://github.com/Nkzlxs/mrslollipop/blob/master/requirements.txt)
