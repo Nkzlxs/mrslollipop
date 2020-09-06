@@ -1,8 +1,10 @@
 import requests
+import re
 
 class Covid19MY():
 
     def __init__(self):
+        self.main()
         pass
 
     def main(self):
@@ -71,36 +73,27 @@ class Covid19MY():
 
 
         """ Find new cases, death count, cured count """
-        digits = []
         temp = None
         output = ["cured","new","death"]
 
-        # Cured Count > new cases > death count
+        # Cured Count -> new cases -> death count
         keywords1 = [
             "Jumlah kumulatif kes yang telah pulih sepenuhnya dari COVID-19",
             "jumlah kes positif COVID-19 di Malaysia",
             "jumlah kumulatif kes kematian COVID-19 di Malaysia"
             ]
-        keywords2 = "sebanyak"
-        keywords3 = "kes"
+        keywords2 = "kes"
 
         for n in range(0,len(keywords1)):
-            digits = []
             num1 = res_text.find(keywords1[n])
-            num2 = res_text.find(keywords2,num1)
-            num3 = res_text.find(keywords3,num2)
+            num2 = res_text.find(keywords2,num1+len(keywords1[n]))
 
-            temp = res_text[num2+len(keywords2):num3]
-            for x in temp:
-                if x.isdigit():
-                    digits.append(x)
+            temp = res_text[num1+len(keywords1[n]):num2]
 
-            a_string = ""
-            for x in digits:
-                a_string += x
-            # print(f"{output[n]}: {int(a_string)}")
-            answer[output[n]] = int(a_string)
-
+            re_unit = re.compile("\d{1,3}")
+            match_obj = re_unit.findall(temp)
+            if match_obj:
+                answer[output[n]] = int("".join(a for a in match_obj))
         print(answer)
 
         """ Return the fetched data and infographic url the the main program """
