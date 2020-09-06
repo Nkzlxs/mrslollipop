@@ -2,10 +2,25 @@
 
 ## Python Modules Requirements
 [requirements.txt](https://github.com/Nkzlxs/mrslollipop/blob/master/requirements.txt)
-1. requests==2.23.0
-2. discord.py==1.3.4
-3. mysql-connector-python==8.0.19
-4. PyNaCl==1.4.0
+1. aiohttp==3.6.2
+2. async-timeout==3.0.1
+3. attrs==20.1.0
+4. certifi==2020.6.20
+5. cffi==1.14.2
+6. chardet==3.0.4
+7. discord==1.0.1
+8. discord.py==1.4.1
+9. idna==2.10
+10. multidict==4.7.6
+11. mysql-connector-python==8.0.21
+12. protobuf==3.13.0
+13. pycparser==2.20
+14. PyNaCl==1.4.0
+15. requests==2.24.0
+16. six==1.15.0
+17. urllib3==1.25.10
+18. yarl==1.5.1
+19. youtube-dl==2020.7.28
 
 ## Features
 1. Auto-updating information on COVID-19 Malaysia
