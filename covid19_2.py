@@ -88,7 +88,7 @@ class Covid19MY():
             num1 = res_text.find(keywords1[n])
             num2 = res_text.find(keywords2,num1+len(keywords1[n]))
 
-            temp = res_text[num1+len(keywords1[n]):num2]
+            temp = res_text[num1+len(keywords1[n]):num2+len(keywords2)+1]
 
             # First filter
             re_unit = re.compile("(<[a-z]+>[ ]*[,\d]+[ ]*</[a-z]+>[ ]*.*kes)|([,\d]+[ ]*kes)")
