@@ -90,10 +90,13 @@ class Covid19MY():
 
             temp = res_text[num1+len(keywords1[n]):num2]
 
-            re_unit = re.compile("[,\d]+ kes") # First Filter
-            match_obj = re_unit.findall(temp) 
-            re_unit = re.compile('\d') # Second Filter
-            match_obj = re_unit.findall("".join(a for a in match_obj))
+            # First filter
+            re_unit = re.compile("(<[a-z]+>[ ]*[,\d]+[ ]*</[a-z]+>[ ]*.*kes)|([,\d]+[ ]*kes)")
+            match_obj = re_unit.search(temp)
+
+            # Second filter
+            re_unit = re.compile('\d')
+            match_obj = re_unit.findall(match_obj[0])
 
             if match_obj:
                 answer[output[n]] = int("".join(a for a in match_obj))
