@@ -4,6 +4,7 @@ import json
 import asyncio
 from datetime import datetime, date, timedelta
 import time
+import argparse
 
 from covid19_2 import Covid19MY
 from database_controller import db_controller_bot
@@ -16,10 +17,16 @@ commands = [
     {"name": "add", "arguments": ["neet date"]}
 ]
 
+tests = [
+    "testCovid19"
+]
+
 
 class MyClient(discord.Client):
 
     async def on_ready(self):
+        self.tgChannel = 694948853165850674
+
         print('Logged on as {0}!'.format(self.user))
         await self.change_presence(
             activity=discord.Game(name="Online3.0"),
@@ -153,12 +160,10 @@ class MyClient(discord.Client):
         if response['status'] is True:
             """ Modify the description """
             desc = ""
-            desc += ":chart_with_upwards_trend:Confirmed Count: %d (+%d)\n" % (
-                latest_info['new'], response['d_new'])
-            desc += ":sparkling_heart:Cured Count: %d (+%d)\n" % (
-                latest_info['cured'], response['d_cured'])
-            desc += ":skull:Death Count: %d (+%d)\n" % (
-                latest_info['death'], response['d_death'])
+            desc += ":chart_with_upwards_trend:Confirmed Count: %d (+%d)\n" % (latest_info['new'], response['d_new'])
+            desc += ":sparkling_heart:Cured Count: %d (+%d)\n" % (latest_info['cured'], response['d_cured'])
+            desc += ":skull:Death Count: %d (+%d)\n" % (latest_info['death'], response['d_death'])
+            desc += ":hospital:Active Count: %d (%d)\n" % (response['c_active_cases'],response['d_active_cases'])
 
             title = "COVID-19 Status in\n马来西亚 Malaysia"
             embed_obj = discord.Embed(
@@ -170,7 +175,7 @@ class MyClient(discord.Client):
             embed_obj.set_footer(
                 text="From Kpkesihatan"
             )
-            a_channel = self.get_channel(694948853165850674)
+            a_channel = self.get_channel(self.tgChannel)
             await a_channel.send(
                 content="@everyone Hi",
                 embed=embed_obj
@@ -183,6 +188,24 @@ class MyClient(discord.Client):
 
     async def update_randomgif_ja(self):
         gif_ja = random_ja.randomGifJA()
+
+def argParsing():
+    argparser = argparse.ArgumentParser(description="Covid19 and Random Gif reporter bot of Nkzlxs's Discord Server.")
+    argparser.add_argument("--main",action="count",help="Append this to command for running the main bot")
+
+    argparser.add_argument(
+        "--test",
+        action="store",
+        metavar="TEST-FUNCTION",
+        help=f"Append this to command for testing",
+        choices=tests
+        )
+    result = argparser.parse_args()
+    if(result.main == None):
+        if result.test == "testCovid19":
+            testCovid19()
+    if(result.main == 1 and result.test == None):
+        main()
 
 
 def main():
@@ -215,6 +238,26 @@ def main():
     client.loop.create_task(clock())
     client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
 
+def testCovid19():
+    cred_path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), "credential.json")
+    cred_file = open(cred_path)
+    credentials = json.load(cred_file)
+    cred_file.close()
+    client = MyClient()
+    async def test():
+        await asyncio.sleep(25) # Wait for the main program run first
+        gate = False
+        client.tgChannel = 723550495662145567
+        if gate is False:
+            await client.update_covid19()
+            gate = not gate
+    client.loop.create_task(test())
+    client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
+
+    
+    
+    
 
 if __name__ == "__main__":
-    main()
+    argParsing()
