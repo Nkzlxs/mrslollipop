@@ -85,17 +85,21 @@ class Covid19MY():
         keywords2 = "kes"
 
         for n in range(0,len(keywords1)):
-            num1 = res_text.find(keywords1[n])
-            num2 = res_text.find(keywords2,num1+len(keywords1[n]))
-
-            temp = res_text[num1+len(keywords1[n]):num2+len(keywords2)+1]
-
             # First filter
+            re_unit = re.compile(
+                pattern=f"{keywords1[n]}.*{keywords2}",
+                flags=re.IGNORECASE
+            )
+            match_obj = re_unit.search(res_text)
+            temp = match_obj[0]
+
+            # Second filter
             re_unit = re.compile("(<[a-z]+>[ ]*[,\d]+[ ]*</[a-z]+>[ ]*.*kes)|([,\d]+[ ]*kes)")
             match_obj = re_unit.search(temp)
 
-            # Second filter
+            # Third filter
             re_unit = re.compile('\d')
+            print(match_obj)
             match_obj = re_unit.findall(match_obj[0])
 
             if match_obj:
