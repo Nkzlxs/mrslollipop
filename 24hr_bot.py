@@ -252,6 +252,7 @@ def testCovid19():
         if gate is False:
             await client.update_covid19()
             gate = not gate
+            exit("Test done?")
     client.loop.create_task(test())
     client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
 

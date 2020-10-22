@@ -54,10 +54,15 @@ class Covid19MY():
         response = requests.get(url=first_hyperlink)
         res_text = response.text
 
-        """ Find the 2nd image, 1st one is currently kpk's logo """
+        """ 
+        Find the 3rd image, 
+        1st one is currently kpk's logo,
+        2nd one is discarded amount.
+        """
         first_image_index = res_text.find("<img") #logo
-        second_image_index = res_text.find("<img",first_image_index+1) #poster
-        src_pos = res_text.find("src=",second_image_index)
+        second_image_index = res_text.find("<img",first_image_index+1) #discard
+        third_image_index = res_text.find("<img",second_image_index+1) #infographic
+        src_pos = res_text.find("src=",third_image_index)
 
         """ Find the first and last quote that contains the link to the latest infographic """
         first_quote = res_text.find("\"",src_pos)
