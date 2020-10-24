@@ -100,13 +100,14 @@ class Covid19MY():
             # print(match_obj[0])
 
             # Second filter
-            re_unit = re.compile("(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\d+[ ]*([, ]+\d+){0,}[ ]*kes)")
+            re_unit = re.compile("(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes[ ]*<)|(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\d+[ ]*([, ]+\d+){0,}[ ]*kes)")
             match_obj = re_unit.search(temp)
             # print(match_obj[0])
 
             # Third filter
             re_unit = re.compile('\d')
             match_obj = re_unit.findall(match_obj[0])
+            # print(match_obj[0])
 
             if match_obj:
                 answer[output[n]] = int("".join(a for a in match_obj))
