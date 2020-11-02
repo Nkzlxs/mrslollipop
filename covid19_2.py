@@ -83,12 +83,11 @@ class Covid19MY():
 
         # Cured Count -> new cases -> death count
         keywords1 = [
-            "Jumlah kumulatif kes yang telah pulih sepenuhnya dari COVID-19",
-            "jumlah kes positif COVID-19 di Malaysia",
-            "jumlah kumulatif kes kematian COVID-19 di Malaysia"
+            "Jumlah[(&nbsp;) ]*kumulatif[(&nbsp;) ]*kes[(&nbsp;) ]*yang[(&nbsp;) ]*telah[(&nbsp;) ]*pulih[(&nbsp;) ]*sepenuhnya[(&nbsp;) ]*dari[(&nbsp;) ]*COVID-19",
+            "jumlah[(&nbsp;) ]*kes[(&nbsp;) ]*positif[(&nbsp;) ]*COVID-19[(&nbsp;) ]*di[(&nbsp;) ]*Malaysia",
+            "jumlah[(&nbsp;) ]*kumulatif[(&nbsp;) ]*kes[(&nbsp;) ]*kematian[(&nbsp;) ]*COVID-19[(&nbsp;) ]*di[(&nbsp;) ]*Malaysia"
             ]
         keywords2 = "kes"
-
         for n in range(0,len(keywords1)):
             # First filter
             re_unit = re.compile(
