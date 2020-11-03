@@ -83,9 +83,9 @@ class Covid19MY():
 
         # Cured Count -> new cases -> death count
         keywords1 = [
-            "Jumlah[(&nbsp;) ]*kumulatif[(&nbsp;) ]*kes[(&nbsp;) ]*yang[(&nbsp;) ]*telah[(&nbsp;) ]*pulih[(&nbsp;) ]*sepenuhnya[(&nbsp;) ]*dari[(&nbsp;) ]*COVID-19",
-            "jumlah[(&nbsp;) ]*kes[(&nbsp;) ]*positif[(&nbsp;) ]*COVID-19[(&nbsp;) ]*di[(&nbsp;) ]*Malaysia",
-            "jumlah[(&nbsp;) ]*kumulatif[(&nbsp;) ]*kes[(&nbsp;) ]*kematian[(&nbsp;) ]*COVID-19[(&nbsp;) ]*di[(&nbsp;) ]*Malaysia"
+            "Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*yang[ ]*(&nbsp;)*[ ]*telah[ ]*(&nbsp;)*[ ]*pulih[ ]*(&nbsp;)*[ ]*sepenuhnya[ ]*(&nbsp;)*[ ]*dari[ ]*(&nbsp;)*[ ]*COVID-19",
+            "jumlah[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia",
+            "jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*kematian[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia"
             ]
         keywords2 = "kes"
         for n in range(0,len(keywords1)):
@@ -96,12 +96,12 @@ class Covid19MY():
             )
             match_obj = re_unit.search(res_text)
             temp = match_obj[0]
-            # print(match_obj[0])
+            print(match_obj[0])
 
             # Second filter
-            re_unit = re.compile("(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes[ ]*<)|(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\d+[ ]*([, ]+\d+){0,}[ ]*kes)")
+            re_unit = re.compile("(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes[ ]*<)|(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\d+[ ]*([, ]+\d+){0,}(&nbsp;)*[ ]*kes)")
             match_obj = re_unit.search(temp)
-            # print(match_obj[0])
+            print(match_obj[0])
 
             # Third filter
             re_unit = re.compile('\d')
