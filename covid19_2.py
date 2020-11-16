@@ -31,7 +31,7 @@ class Covid19MY():
             # print(f"String length: {dif}")
 
             """ Verify if it is about the latest covid19 information or not """
-            keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
+            keywords = "kenyataan-akhbar-kpk-14-november-2020-situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
             verify_word = res_text.find(keywords,first_quote,end_quote)
             if verify_word == -1:
                 """ If there's no keywords in the first hyperlink, skip to the next one """
@@ -55,26 +55,31 @@ class Covid19MY():
         res_text = response.text
 
         """ 
-        Find the 3rd image, 
-        1st one is currently kpk's logo,
-        2nd one is discarded amount.
+        Find the case by states picture, src should contains "mapping-baru"
         """
-        first_image_index = res_text.find("<img") #logo
-        second_image_index = res_text.find("<img",first_image_index+1) #discard
-        third_image_index = res_text.find("<img",second_image_index+1) #infographic
-        src_pos = res_text.find("src=",third_image_index)
+        img_pattern = re.compile("<img.* {1}src=\".*mapping-baru.*\" {1}")
+        match = img_pattern.search(res_text)
 
-        """ Find the first and last quote that contains the link to the latest infographic """
-        first_quote = res_text.find("\"",src_pos)
-        end_quote = res_text.find("\"",first_quote+1)
+        
+        if match is not None:
+            link_pattern = re.compile(" {1}src=\".*mapping-baru.*\" {1}")
+            link = link_pattern.search(match[0])
+            if link is not None:
+                """ Find the first and last quote that contains the link to the latest infographic """
+                first_quote = link[0].find("\"")
+                end_quote = link[0].find("\"",first_quote+1)
 
-        dif = end_quote - first_quote
-        # print(f"String length: {dif}")
+                dif = end_quote - first_quote
+                # print(f"String length: {dif}")
 
-        """ Here is the link to the infographic """
-        src_link = res_text[first_quote+1:first_quote+dif]
-        # print(src_link)
-        answer['image_src'] = src_link
+                """ Here is the link to the infographic """
+                src_link = link[0][first_quote+1:first_quote+dif]
+                if src_link != "":
+                    print(src_link)
+                    answer['image_src'] = src_link
+        else:
+            answer['image_src'] = "https://i.stack.imgur.com/6M513.png"
+
 
 
         """ Find new cases, death count, cured count """

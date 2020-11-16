@@ -1,2 +1,8 @@
 # ignore the credential.json file
 credential.json
+
+# ignore all folders
+*/
+
+# ignore all .cfg
+*.cfg
