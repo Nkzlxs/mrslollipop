@@ -31,7 +31,7 @@ class Covid19MY():
             # print(f"String length: {dif}")
 
             """ Verify if it is about the latest covid19 information or not """
-            keywords = "kenyataan-akhbar-kpk-14-november-2020-situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
+            keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
             verify_word = res_text.find(keywords,first_quote,end_quote)
             if verify_word == -1:
                 """ If there's no keywords in the first hyperlink, skip to the next one """
