@@ -12,7 +12,6 @@ class Covid19MY():
 
         """ Navigate to main page """
         response = requests.get(url="https://kpkesihatan.com/")
-        # response = requests.get(url="https://www.facebook.com")
         res_text = response.text
 
         """ Find the div with id main-content """
@@ -28,7 +27,6 @@ class Covid19MY():
             end_quote = res_text.find("\"",first_quote+1)
 
             dif = end_quote - first_quote
-            # print(f"String length: {dif}")
 
             """ Verify if it is about the latest covid19 information or not """
             keywords = "situasi-semasa-jangkitan-penyakit-coronavirus-2019-covid-19-di-malaysia"
@@ -41,28 +39,26 @@ class Covid19MY():
                 if a_link == zeroth_link:
                     exit("No specifed keywords found! Exiting...") # terminate the program
             else:
+                """ Break on the first loop, because the first result will always be the first one """
                 break
-                pass
-                # print("Keyword found!")
 
         """ Get the hyperlink encased within the quotes """
         first_hyperlink = res_text[first_quote+1:first_quote+dif]
         answer['article_src'] = first_hyperlink
-        # print(first_hyperlink)
 
         """ Navigate to the fetched hyperlink """
         response = requests.get(url=first_hyperlink)
         res_text = response.text
 
         """ 
-        Find the case by states picture, src should contains "mapping-baru"
+        Find the case by states picture, src should contains "bm-kes-positif-negeri"
         """
-        img_pattern = re.compile("<img.* {1}src=\".*mapping-baru.*\" {1}")
+        img_pattern = re.compile("<img.*src=\".*bm-kes-positif-negeri.*\"")
         match = img_pattern.search(res_text)
 
         
         if match is not None:
-            link_pattern = re.compile(" {1}src=\".*mapping-baru.*\" {1}")
+            link_pattern = re.compile("src=\".*bm-kes-positif-negeri.*\"")
             link = link_pattern.search(match[0])
             if link is not None:
                 """ Find the first and last quote that contains the link to the latest infographic """
@@ -70,7 +66,6 @@ class Covid19MY():
                 end_quote = link[0].find("\"",first_quote+1)
 
                 dif = end_quote - first_quote
-                # print(f"String length: {dif}")
 
                 """ Here is the link to the infographic """
                 src_link = link[0][first_quote+1:first_quote+dif]
