@@ -250,7 +250,7 @@ class randomGifJA:
             "color": 0x234234
         })
         queryJson = {
-            "content": "@everyone　こんにちは、みんな",
+            "content": "こんにちは、みんな",
             "username": "Lollipop Gif",
             "embeds": myEmbeds
         }
