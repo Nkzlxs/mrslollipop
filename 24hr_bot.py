@@ -160,10 +160,10 @@ class MyClient(discord.Client):
         if response['status'] is True:
             """ Modify the description """
             desc = ""
-            desc += ":chart_with_upwards_trend:Confirmed Count: %d (+%d)\n" % (latest_info['new'], response['d_new'])
-            desc += ":sparkling_heart:Cured Count: %d (+%d)\n" % (latest_info['cured'], response['d_cured'])
-            desc += ":skull:Death Count: %d (+%d)\n" % (latest_info['death'], response['d_death'])
-            desc += ":hospital:Active Count: %d (%d)\n" % (response['c_active_cases'],response['d_active_cases'])
+            desc += ":chart_with_upwards_trend:Confirmed Count: %d (%+d)\n" % (latest_info['new'], response['d_new'])
+            desc += ":sparkling_heart:Cured Count: %d (%+d)\n" % (latest_info['cured'], response['d_cured'])
+            desc += ":skull:Death Count: %d (%+d)\n" % (latest_info['death'], response['d_death'])
+            desc += ":hospital:Active Count: %d (%+d)\n" % (response['c_active_cases'],response['d_active_cases'])
 
             title = "COVID-19 Status in\n马来西亚 Malaysia"
             embed_obj = discord.Embed(
@@ -193,11 +193,16 @@ def argParsing():
     argparser = argparse.ArgumentParser(description="Covid19 and Random Gif reporter bot of Nkzlxs's Discord Server.")
     argparser.add_argument("--main",action="count",help="Append this to command for running the main bot")
 
+    available_function = ""
+    for f in tests:
+        available_function += str(f) + ","
+    available_function = available_function.strip(",")
+    
     argparser.add_argument(
         "--test",
         action="store",
         metavar="TEST-FUNCTION",
-        help=f"Append this to command for testing",
+        help=f"Append this to command for testing; Choice: [{available_function}]",
         choices=tests
         )
     result = argparser.parse_args()
