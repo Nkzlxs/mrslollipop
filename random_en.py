@@ -228,7 +228,7 @@ class randomGifEN:
         })
 
         queryJson = {
-            "content": "@everyone Greetings",
+            "content": "Greetings",
             "username": "Lollipop Gif",
             "embeds": myEmbeds
         }
