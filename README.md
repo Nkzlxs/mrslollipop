@@ -22,6 +22,19 @@
 18. yarl==1.5.1
 19. youtube-dl==2020.7.28
 
+## Running the program
+For infomation on running the program.
+
+    python3 24hr_bot.py --help
+
+On server
+
+    python3 24hr_bot.py --main
+
+To test a function
+
+    python3 24hr_bot.py --test [available function]
+
 ## Features
 1. Auto-updating information on COVID-19 Malaysia
 2. Bot commands
@@ -47,3 +60,4 @@
 - [oauth2_simplified.py](https://github.com/Nkzlxs/mrslollipop/blob/master/oauth2_simplified.py) -> Code responsible for generating oauth2 access token for gmail's IMAP connection
 - [random_en.py](https://github.com/Nkzlxs/mrslollipop/blob/master/random_en.py) -> Code responsible for finding keywords throught a Dictionary API and fetch some related GIF(s) from tenor and post it to discord.
 - [random_ja.py](https://github.com/Nkzlxs/mrslollipop/blob/master/random_ja.py) -> Code responsible for fetching a daily received email from FeedBlitz for a Japanese word as a keyword and fetch related GIF(s) from tenor and post it to discord
+
