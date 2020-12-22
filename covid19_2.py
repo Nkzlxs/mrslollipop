@@ -45,6 +45,7 @@ class Covid19MY():
         """ Get the hyperlink encased within the quotes """
         first_hyperlink = res_text[first_quote+1:first_quote+dif]
         answer['article_src'] = first_hyperlink
+        print(first_hyperlink)
 
         """ Navigate to the fetched hyperlink """
         response = requests.get(url=first_hyperlink)
@@ -84,12 +85,15 @@ class Covid19MY():
         # Cured Count -> new cases -> death count
         keywords1 = [
             "(Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*yang[ ]*(&nbsp;)*[ ]*telah[ ]*(&nbsp;)*[ ]*pulih[ ]*(&nbsp;)*[ ]*sepenuhnya[ ]*(&nbsp;)*[ ]*dari[ ]*(&nbsp;)*[ ]*COVID-19)|Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*sembuh[ ]*(&nbsp;)*sepenuhnya[ ]*(&nbsp;)*[ ]*daripada[ ]*(&nbsp;)*[ ]*COVID-19",
-            "jumlah[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia",
+            "jumlah[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia|kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia",
             "jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*kematian[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia"
             ]
         keywords2 = "kes"
         try:
             for n in range(0,len(keywords1)):
+
+                print(n,end=" - ")
+                
                 # First filter
                 re_unit = re.compile(
                     pattern=f"{keywords1[n]}.*{keywords2}",
