@@ -82,13 +82,21 @@ class Covid19MY():
         temp = None
         output = ["cured","new","death"]
 
-        # Cured Count -> new cases -> death count
+        # keywords1 = [
+        #     "((Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*yang[ ]*(&nbsp;)*[ ]*telah[ ]*(&nbsp;)*[ ]*pulih[ ]*(&nbsp;)*[ ]*sepenuhnya[ ]*(&nbsp;)*[ ]*dari[ ]*(&nbsp;)*[ ]*COVID-19)|(Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*sembuh[ ]*(&nbsp;)*sepenuhnya[ ]*(&nbsp;)*[ ]*daripada[ ]*(&nbsp;)*[ ]*COVID-19))",
+        #     "((jumlah[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia)|(kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia))",
+        #     "(jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*kematian[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia)"
+        #     ]
+
+        # Total Cured Count -> new cases -> death count
         keywords1 = [
-            "((Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*yang[ ]*(&nbsp;)*[ ]*telah[ ]*(&nbsp;)*[ ]*pulih[ ]*(&nbsp;)*[ ]*sepenuhnya[ ]*(&nbsp;)*[ ]*dari[ ]*(&nbsp;)*[ ]*COVID-19)|(Jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*sembuh[ ]*(&nbsp;)*sepenuhnya[ ]*(&nbsp;)*[ ]*daripada[ ]*(&nbsp;)*[ ]*COVID-19))",
-            "((jumlah[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia)|(kes[ ]*(&nbsp;)*[ ]*positif[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia))",
-            "(jumlah[ ]*(&nbsp;)*[ ]*kumulatif[ ]*(&nbsp;)*[ ]*kes[ ]*(&nbsp;)*[ ]*kematian[ ]*(&nbsp;)*[ ]*COVID-19[ ]*(&nbsp;)*[ ]*di[ ]*(&nbsp;)*[ ]*Malaysia)"
-            ]
-        keywords2 = "kes"
+            "Kes sembuh[ ]*(&nbsp;)*[ ]*",
+            "Kes baharu[ ]*(&nbsp;)*[ ]*",
+            "Kes kematian[ ]*(&nbsp;)*[ ]*"
+        ]
+
+        # keywords2 = "kes"
+        keywords2 = "kumulatif"
         try:
             for n in range(0,len(keywords1)):
 
@@ -96,22 +104,21 @@ class Covid19MY():
                 
                 # First filter
                 re_unit = re.compile(
-                    pattern=f"{keywords1[n]}.*{keywords2}",
+                    pattern="(%s.{0,50}%s)"%(keywords1[n],keywords2),
                     flags=re.IGNORECASE
                 )
                 match_obj = re_unit.search(res_text)
                 temp = match_obj[0]
                 print(match_obj[0])
 
-                # Second filter
-                re_unit = re.compile("(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes[ ]*<)|(<[a-z]+>[ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\d+[ ]*([, ]+\d+){0,}(&nbsp;)*[ ]*kes)")
+                # Second filter, filtering html tags
+                re_unit = re.compile("(<[a-z]+>[ ]*\([ ]*[\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes[ ]*<)|(<[a-z]+>[ ]*\([ ]*\d+[ ]*([, ]+\d+){0,}[ ]*</[a-z]+>[ ]*.*kes)|(\([ ]*\d+[ ]*([, ]+\d+){0,}(&nbsp;)*[ ]*kes)")
                 match_obj = re_unit.search(temp)
                 print(match_obj[0])
 
                 # Third filter
                 re_unit = re.compile('\d')
                 match_obj = re_unit.findall(match_obj[0])
-                # print(match_obj[0])
 
                 if match_obj:
                     answer[output[n]] = int("".join(a for a in match_obj))
