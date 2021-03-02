@@ -1,7 +1,7 @@
 # Discord bot for Nkzlxs's Discord Server (Docker port branch)
 
 ## Python Modules Requirements
-Check [requirements.txt](./requirements.txt)
+Check [requirements.txt](./discord_bot/requirements.txt)
 
 ## Running the program
 For infomation on running the program.

@@ -4,5 +4,12 @@ credential.json
 # ignore all folders
 */
 
+!db
+db/*.sql
+
+db/*.env
+
+!discord_bot
+
 # ignore all .cfg
 *.cfg

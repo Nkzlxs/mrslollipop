@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+
+  discord_bot:
+    depends_on:
+      - mysql    
+    image: python:3.9.2-buster
+    networks:
+      - backend
+    build: ./discord_bot
+
+  mysql:
+    image: mysql:8.0.23
+    networks:
+      - backend
+
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d/:ro" 
+        
+    ports:
+      - "44444:3306"
+    env_file: ./db/credentials.env 
+
+networks:
+  backend:
