@@ -16,6 +16,11 @@ To test a function
 
     python3 24hr_bot.py --test [available function]
 
+On Docker
+```
+docker-compose up --build
+```
+
 ## Features
 1. Auto-updating information on COVID-19 Malaysia
 2. Bot commands
