@@ -207,8 +207,10 @@ def argParsing():
         )
     result = argparser.parse_args()
     if(result.main == None):
-        if result.test == "testCovid19":
-            testCovid19()
+        if result.test in tests:
+            globals()[result.test]()
+
+
     if(result.main == 1 and result.test == None):
         main()
 
@@ -260,9 +262,6 @@ def testCovid19():
             exit("Test done?")
     client.loop.create_task(test())
     client.run(credentials["DISCORD_BOT_ACCESS_TOKEN"])
-
-    
-    
     
 
 if __name__ == "__main__":
