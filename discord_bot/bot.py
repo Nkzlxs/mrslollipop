@@ -150,7 +150,7 @@ async def update_covid19(client):
         for _ in registered_channels:
             a_channel = client.get_channel(_)
             await a_channel.send(
-                content="@everyone Hi",
+                content="Hi",
                 embed=embed_obj
             )
     else:
