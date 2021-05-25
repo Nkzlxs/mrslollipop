@@ -11,6 +11,9 @@ Check [requirements.txt](./discord_bot/requirements.txt)
 ## Docker
 `docker-compose up --build`
 
+Optionally, use argument `-d` to run in detached mode
+
+
 ## Manually running the program
 For infomation on running the program.
 `python3 24hr_bot.py --help`
