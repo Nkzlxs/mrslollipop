@@ -8,7 +8,10 @@
 ## Python Modules Requirements
 Check [requirements.txt](./discord_bot/requirements.txt)
 
-## Running the program
+## Docker
+`docker-compose up --build`
+
+## Manually running the program
 For infomation on running the program.
 `python3 24hr_bot.py --help`
 
@@ -17,9 +20,6 @@ On server (This will run the program in an async loop)
 
 To test a function
 `python3 24hr_bot.py --test [available function]`
-
-On Docker
-`docker-compose up --build`
 
 In Case of faulty installation
 ```
